@@ -105,11 +105,14 @@ function complexity(filePath)
 	var ast = esprima.parse(buf, options);
 
 	var i = 0;
-
+	/*var numIfs = 0;
+	var numLoops = 0;
+	var complexity = 0;*/
 	// A file level-builder:
 	var fileBuilder = new FileBuilder();
 	fileBuilder.FileName = filePath;
 	fileBuilder.ImportCount = 0;
+	fileBuilder.Strings = 0;
 	builders[filePath] = fileBuilder;
 
 	// Tranverse program with a function visitor.
@@ -123,7 +126,26 @@ function complexity(filePath)
 			builder.StartLine    = node.loc.start.line;
 
 			builders[builder.FunctionName] = builder;
+
+			builder.ParameterCount = node.params.length;
+
+		/*	if (isDecision(node) === true) {
+				if (node.type == 'IfStatement') {
+					numIfs += 1;
+				} else {
+					numLoops += 1;
+				}
+			}
+
+			complexity = numIfs / (numLoops + 1);
+
+			builder.SimpleCyclomaticComplexity = complexity;*/
 		}
+
+		if (node.type === 'Literal') {
+			fileBuilder.Strings += 1;
+		}
+
 
 	});
 
@@ -203,7 +225,7 @@ function Crazy (argument)
       {
           var mints = secs / 60;
           var remainder = parseInt(secs.toString().split(".")[0]) -
-(parseInt(mints.toString().split(".")[0]) * 60);
+			(parseInt(mints.toString().split(".")[0]) * 60);
           var szmin;
           if ( mints > 1 )
           {
@@ -214,16 +236,16 @@ function Crazy (argument)
               szmin = "minute";
           }
           return mints.toString().split(".")[0] + " " + szmin + " " +
-remainder.toString() + " seconds";
+			remainder.toString() + " seconds";
       }
       else
       {
           var mints = secs / 60;
           var hours = mints / 60;
           var remainders = parseInt(secs.toString().split(".")[0]) -
-(parseInt(mints.toString().split(".")[0]) * 60);
+			(parseInt(mints.toString().split(".")[0]) * 60);
           var remainderm = parseInt(mints.toString().split(".")[0]) -
-(parseInt(hours.toString().split(".")[0]) * 60);
+			(parseInt(hours.toString().split(".")[0]) * 60);
           var szmin;
           if ( remainderm > 1 )
           {
@@ -272,7 +294,7 @@ remainder.toString() + " seconds";
 				  return;
           }
           return hours.toString().split(".")[0] + " " + szhr + " " +
-mints.toString().split(".")[0] + " " + szmin;
+			mints.toString().split(".")[0] + " " + szmin;
       }
   }
  exports.complexity = complexity;
