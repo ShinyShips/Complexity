@@ -1,4 +1,4 @@
-! [travis] (https://github.com/ShinyShips/Complexity/blob/master/complex-travis.png)
+![travis] (https://github.com/ShinyShips/Complexity/blob/master/complex-travis.png)
 
 # Complexity & Travis-CI Lab
 
