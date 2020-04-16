@@ -99,15 +99,29 @@ function traverseWithParents(object, visitor)
     }
 }
 
+function countConditions(node)
+{
+	var count = 0;
+	traverseWithParents(node, function(node) 
+	{
+		if ((node.type === "LogicalExpression") && ((node.operator === "&&") || (node.operator === "||")))
+		{
+			count++;
+		}
+	});
+	if (count > 0) {
+		count++;
+	}
+	return count;
+}
+
 function complexity(filePath)
 {
 	var buf = fs.readFileSync(filePath, "utf8");
 	var ast = esprima.parse(buf, options);
 
 	var i = 0;
-	/*var numIfs = 0;
-	var numLoops = 0;
-	var complexity = 0;*/
+
 	// A file level-builder:
 	var fileBuilder = new FileBuilder();
 	fileBuilder.FileName = filePath;
@@ -129,17 +143,22 @@ function complexity(filePath)
 
 			builder.ParameterCount = node.params.length;
 
-		/*	if (isDecision(node) === true) {
-				if (node.type == 'IfStatement') {
-					numIfs += 1;
-				} else {
-					numLoops += 1;
+			var conditions = new Array();
+
+			traverseWithParents(node , function (node) {
+				//var subBuilder = new FunctionBuilder();
+				if (isDecision(node) === true) {
+					builder.SimpleCyclomaticComplexity += 1;
+					var temp = countConditions(node);
+					conditions.push(temp);
 				}
+
+			});
+
+			if (conditions.length > 0){
+				builder.MaxConditions = Math.max.apply(Math, conditions);
 			}
-
-			complexity = numIfs / (numLoops + 1);
-
-			builder.SimpleCyclomaticComplexity = complexity;*/
+			
 		}
 
 		if (node.type === 'Literal') {
