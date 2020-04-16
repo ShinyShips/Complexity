@@ -1,3 +1,5 @@
+! [travis] (https://github.com/ShinyShips/Complexity/blob/master/complex-travis.png)
+
 # Complexity & Travis-CI Lab
 
 In this lab, you'll be implementing simple algorithms for checking basic properties of code complexity, and working with Travis-CI for Continuous Integration.
